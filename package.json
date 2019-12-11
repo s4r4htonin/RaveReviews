@@ -1,0 +1,23 @@
+{
+  "name": "package",
+  "version": "1.0.0",
+  "description": "RaveReviews",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s4r4htonin/RaveReviews.git"
+  },
+  "author": "Sarah Thomas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/s4r4htonin/RaveReviews/issues"
+  },
+  "homepage": "https://github.com/s4r4htonin/RaveReviews#readme",
+  "dependencies": {
+    "ejs": "^3.0.1",
+    "express": "^4.17.1"
+  }
+}
