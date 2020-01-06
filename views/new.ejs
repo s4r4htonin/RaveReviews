@@ -1,0 +1,13 @@
+<%- include("partials/header") %>
+
+<h1>Add a Festival</h1>
+
+<form action="/festivals" method="POST">
+    <input type="text" placeholder="festival name" name="festivalName">
+    <input type="text" placeholder="image url" name="imageUrl">
+    <button>Submit</button>
+</form>
+
+<a href="/festivals">Go Back</a>
+
+<%- include("partials/footer") %>
