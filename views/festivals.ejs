@@ -17,11 +17,11 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row text-center" style="display:flex; flex-wrap: wrap;">
         <% for (let i = 0; i < festivals.length; i++){ %>
             <div class="col-md-3 col-sm-6">
                 <div class="thumbnail">
-                    <img src="<%= festivals[i].image %>" style="height: 150px">   
+                    <img src="<%= festivals[i].image %>">   
                     <div class="caption">
                         <h4><%= festivals[i].name %></h4>
                     </div>
