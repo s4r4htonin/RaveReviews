@@ -1,7 +1,20 @@
 //Definitions
-const express = require('express');
-const app = express();
-const bodyParser = require("body-parser");
+const express    = require('express'),
+      app        = express(),
+      bodyParser = require("body-parser"),
+      mongoose   = require("mongoose");
+
+mongoose.connect("mongodb://localhost/rave_reviews", { useNewUrlParser: true }); //connect JS to MongoDB
+app.use(bodyParser.urlencoded({ extended: true }));
+app.set("view engine", "ejs"); //Tells express that /views are ejs files
+
+//Schema setup
+const festivalSchema = new mongoose.Schema({
+    name: String,
+    image: String
+});
+
+const Festival = mongoose.model("Festival", festivalSchema);
 
 //temporary array to hold festival objects; will eventually be replaced by a database
 let festivals = [
@@ -15,11 +28,6 @@ let festivals = [
     { name: "Movement", image: "https://www.youredm.com/wp-content/uploads/2018/06/34072640_1837611946261130_6042930109713743872_o-1050x600.jpg" },
     { name: "Second Sky", image: "https://i2.wp.com/thissongissick.com/wp-content/uploads/2019/06/Crowd.jpg?resize=750%2C422&quality=88&strip&ssl=1" }
 ];
-
-app.use(bodyParser.urlencoded({ extended: true }));
-
-//Tells express that /views are ejs files
-app.set("view engine", "ejs");
 
 //Home page
 app.get("/", function (req, res) {
