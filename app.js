@@ -4,7 +4,13 @@ const express    = require('express'),
       bodyParser = require("body-parser"),
       mongoose   = require("mongoose");
 
-mongoose.connect("mongodb://localhost/rave_reviews", { useNewUrlParser: true }); //connect JS to MongoDB
+//Fix mongoose deprecation warnings
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+
+mongoose.connect("mongodb://localhost/rave_reviews"); //connect JS to MongoDB
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs"); //Tells express that /views are ejs files
 
@@ -13,21 +19,7 @@ const festivalSchema = new mongoose.Schema({
     name: String,
     image: String
 });
-
 const Festival = mongoose.model("Festival", festivalSchema);
-
-//temporary array to hold festival objects; will eventually be replaced by a database
-let festivals = [
-    { name: "Spring Awakening", image: "https://d2mv4ye331xrto.cloudfront.net/wp-content/uploads/2018/12/HEADER4-1200x631.jpg" },
-    { name: "Electric Daisy Carnival", image: "https://www.youredm.com/wp-content/uploads/2019/05/Alex-Perez-for-Insomniac-Events-1.jpg" },
-    { name: "TomorrowWorld", image: "https://cbsnews1.cbsistatic.com/hub/i/2014/11/24/c53f0c64-0545-4550-ab12-34cc491ea577/3.jpg" },
-    { name: "Electric Forest", image: "http://downbeats.com/wp-content/uploads/Sherwood-Forest-EF.jpg" },
-    { name: "Electric Zoo", image: "https://www.billboard.com/files/styles/article_main_image/public/media/02-Electric-Zoo-stage-production-graphic-billboard-1548.jpg" },
-    { name: "îlesoniq", image: "https://dancingastronaut.com/wp-content/uploads/2018/08/ilesoniq-2016.jpg" },
-    { name: "Ultra", image: "https://www.edmtunes.com/wp-content/uploads/2018/03/PH_0326_UMF01.jpg" },
-    { name: "Movement", image: "https://www.youredm.com/wp-content/uploads/2018/06/34072640_1837611946261130_6042930109713743872_o-1050x600.jpg" },
-    { name: "Second Sky", image: "https://i2.wp.com/thissongissick.com/wp-content/uploads/2019/06/Crowd.jpg?resize=750%2C422&quality=88&strip&ssl=1" }
-];
 
 //Home page
 app.get("/", function (req, res) {
@@ -36,7 +28,13 @@ app.get("/", function (req, res) {
 
 //Festivals
 app.get("/festivals", function (req, res) {
-    res.render("festivals", { festivals: festivals });
+    Festival.find({}, function(err, allFestivals){ //get all the festivals from the DB
+        if (err){
+            console.log(err);
+        } else {
+            res.render("festivals", { festivals: allFestivals }); //render the festivals
+        }
+    });
 });
 
 //Create a new festival
@@ -45,8 +43,14 @@ app.post("/festivals", function (req, res) { //get data from form and add to fes
         name: req.body.festivalName,
         image: req.body.imageUrl
     };
-    festivals.push(newFestival);
-    res.redirect("/festivals"); //redirect to /festivals 
+    // Create a new festival and save to DB
+    Festival.create(newFestival, function(err, newlyCreated){
+        if (err){
+            console.log(err);
+        } else {
+            res.redirect("/festivals"); //redirect to /festivals 
+        }
+    });
 });
 
 //Form to add a new festival
