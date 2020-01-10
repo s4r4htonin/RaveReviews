@@ -1,8 +1,21 @@
 //Definitions
-const express    = require('express'),
-      app        = express(),
-      bodyParser = require("body-parser"),
-      mongoose   = require("mongoose");
+const express = require('express'),
+    app = express(),
+    bodyParser = require("body-parser"),
+    mongoose = require("mongoose");
+
+//temporary array to hold already known festivals
+// let festivals = [
+//     { name: "Spring Awakening", image: "https://d2mv4ye331xrto.cloudfront.net/wp-content/uploads/2018/12/HEADER4-1200x631.jpg" },
+//     { name: "Electric Daisy Carnival", image: "https://www.youredm.com/wp-content/uploads/2019/05/Alex-Perez-for-Insomniac-Events-1.jpg" },
+//     { name: "TomorrowWorld", image: "https://cbsnews1.cbsistatic.com/hub/i/2014/11/24/c53f0c64-0545-4550-ab12-34cc491ea577/3.jpg" },
+//     { name: "Electric Forest", image: "http://downbeats.com/wp-content/uploads/Sherwood-Forest-EF.jpg" },
+//     { name: "Electric Zoo", image: "https://www.billboard.com/files/styles/article_main_image/public/media/02-Electric-Zoo-stage-production-graphic-billboard-1548.jpg" },
+//     { name: "îlesoniq", image: "https://dancingastronaut.com/wp-content/uploads/2018/08/ilesoniq-2016.jpg" },
+//     { name: "Ultra", image: "https://www.edmtunes.com/wp-content/uploads/2018/03/PH_0326_UMF01.jpg" },
+//     { name: "Movement", image: "https://www.youredm.com/wp-content/uploads/2018/06/34072640_1837611946261130_6042930109713743872_o-1050x600.jpg" },
+//     { name: "Second Sky", image: "https://i2.wp.com/thissongissick.com/wp-content/uploads/2019/06/Crowd.jpg?resize=750%2C422&quality=88&strip&ssl=1" }
+// ];
 
 //Fix mongoose deprecation warnings
 mongoose.set('useNewUrlParser', true);
@@ -17,7 +30,8 @@ app.set("view engine", "ejs"); //Tells express that /views are ejs files
 //Schema setup
 const festivalSchema = new mongoose.Schema({
     name: String,
-    image: String
+    image: String,
+    description: String
 });
 const Festival = mongoose.model("Festival", festivalSchema);
 
@@ -26,26 +40,29 @@ app.get("/", function (req, res) {
     res.render("landing");
 });
 
-//Festivals
+//RESTful Routes//
+
+//INDEX - Show all festivals
 app.get("/festivals", function (req, res) {
-    Festival.find({}, function(err, allFestivals){ //get all the festivals from the DB
-        if (err){
+    Festival.find({}, function (err, allFestivals) { //get all the festivals from the DB
+        if (err) {
             console.log(err);
         } else {
-            res.render("festivals", { festivals: allFestivals }); //render the festivals
+            res.render("index", { festivals: allFestivals }); //render the festivals
         }
     });
 });
 
-//Create a new festival
+//CREATE - Add a festival to the database
 app.post("/festivals", function (req, res) { //get data from form and add to festivals array
     let newFestival = {
         name: req.body.festivalName,
-        image: req.body.imageUrl
+        image: req.body.imageUrl,
+        description: req.body.festivalDescription
     };
     // Create a new festival and save to DB
-    Festival.create(newFestival, function(err, newlyCreated){
-        if (err){
+    Festival.create(newFestival, function (err, newlyCreated) {
+        if (err) {
             console.log(err);
         } else {
             res.redirect("/festivals"); //redirect to /festivals 
@@ -53,9 +70,34 @@ app.post("/festivals", function (req, res) { //get data from form and add to fes
     });
 });
 
-//Form to add a new festival
+//Code to add to the database without using the browser form
+// Festival.create({
+//     name: "Spring Awakening",
+//     image: "https://d2mv4ye331xrto.cloudfront.net/wp-content/uploads/2018/12/HEADER4-1200x631.jpg",
+//     description: "Spring Awakening is a 3-day electronic music festival in Chicago, IL."
+// }, function (err, festival){
+//     if (err){
+//         console.log(err);
+//     } else {
+//         console.log("Newly created festival");
+//         console.log(festival);
+//     }
+// });
+
+//NEW - Display form to add a new festival
 app.get("/festivals/new", function (req, res) {
     res.render("new");
+});
+
+//SHOW - Show information about a single festival
+app.get("/festivals/:id", function (req, res) {
+    Festival.findById(req.params.id, function(err, foundFestival){ //find the festival with the provided ID
+        if (err){
+            console.log(err);
+        } else {
+            res.render("show", {festival: foundFestival}); //render show template with that festival
+        }
+    });
 });
 
 //Start server
