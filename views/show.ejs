@@ -1,9 +1,17 @@
 <%- include("partials/header") %>
 
+<!-- Festival Name -->
 <h1><%= festival.name %></h1>
 
+<!-- Image -->
 <img src="<%= festival.image %>" alt="">
 
+<!-- Festival Description -->
 <p><%= festival.description %></p>
+
+<!-- Comments -->
+<% festival.comments.forEach(function(comment){ %>
+    <p><strong><%= comment.author %></strong> - <%= comment.text %></p>
+<% }); %>
 
 <%- include("partials/footer") %>

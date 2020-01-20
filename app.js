@@ -5,7 +5,12 @@ const   express    = require('express'),
         mongoose   = require("mongoose");
 
 //Models
-const Festival = require("./models/festival");
+const Festival = require("./models/festival"),
+      Comment = require("./models/comment");
+
+//Database seed file (comment this out when done testing)
+const seedDB = require("./seeds");
+seedDB();
 
 //temporary array to hold already known festivals
 // let festivals = [
@@ -65,20 +70,6 @@ app.post("/festivals", function (req, res) { //get data from form and add to fes
     });
 });
 
-//Code to add to the database without using the browser form
-// Festival.create({
-//     name: "Spring Awakening",
-//     image: "https://d2mv4ye331xrto.cloudfront.net/wp-content/uploads/2018/12/HEADER4-1200x631.jpg",
-//     description: "Spring Awakening is a 3-day electronic music festival in Chicago, IL."
-// }, function (err, festival){
-//     if (err){
-//         console.log(err);
-//     } else {
-//         console.log("Newly created festival");
-//         console.log(festival);
-//     }
-// });
-
 //NEW - Display form to add a new festival
 app.get("/festivals/new", function (req, res) {
     res.render("new");
@@ -86,7 +77,7 @@ app.get("/festivals/new", function (req, res) {
 
 //SHOW - Show information about a single festival
 app.get("/festivals/:id", function (req, res) {
-    Festival.findById(req.params.id, function(err, foundFestival){ //find the festival with the provided ID
+    Festival.findById(req.params.id).populate("comments").exec(function(err, foundFestival){ //find the festival with the provided ID and populate comments
         if (err){
             console.log(err);
         } else {
