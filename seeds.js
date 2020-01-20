@@ -6,7 +6,7 @@ const Festival = require("./models/festival");
       Comment  = require("./models/comment");
 
 //Sample festivals
-const data = [
+const seeds = [
     {
         name: "Spring Awakening",
         image: "https://d2mv4ye331xrto.cloudfront.net/wp-content/uploads/2018/12/HEADER4-1200x631.jpg",
@@ -52,49 +52,23 @@ const data = [
         image: "https://i2.wp.com/thissongissick.com/wp-content/uploads/2019/06/Crowd.jpg?resize=750%2C422&quality=88&strip&ssl=1",
         description: "Tart marzipan muffin sesame snaps tiramisu caramels. Lemon drops danish macaroon gummies jelly muffin oat cake. Marzipan liquorice cookie powder cake ice cream. Cookie marzipan candy canes jelly-o chocolate. Liquorice apple pie sugar plum icing sugar plum bonbon soufflé cheesecake pie. Dragée biscuit marzipan cheesecake marshmallow. Gingerbread sweet chocolate bar oat cake. Marzipan powder chocolate. Candy canes candy croissant."
     }
-]
+];
 
-function seedDB() {
-    //Remove all festivals from database
-    Festival.remove({}, function (err) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("removed festivals");
-            // Comment.remove({}, function (err) {
-            //     if (err) {
-            //         console.log(err);
-            //     }
-            //     console.log("removed comments!");
+async function seedDB() {
+    await Festival.deleteMany({}); //remove all festivals from the database
+    await Comment.deleteMany({}); //remove all comments from the database
 
-            //add sample festivals
-            data.forEach(function (seed) {
-                Festival.create(seed, function (err, festival) {
-                    if (err) {
-                        console.log(err)
-                    } else {
-                        console.log("added a festival");
-
-                        //create a comment for each festival
-                        Comment.create(
-                            {
-                                text: "This place is great, but I wish there was internet",
-                                author: "Homer"
-                            }, function (err, comment) {
-                                if (err) {
-                                    console.log(err);
-                                } else {
-                                    festival.comments.push(comment);
-                                    festival.save();
-                                    console.log("Created new comment");
-                                }
-                            });
-                    }
-                });
-            });
-        }
-    });
-    //add a few comments
-}
+    for(const seed of seeds) {
+        let festival = await Festival.create(seed); //create each festival in seeds array
+        let comment = await Comment.create( //add the same comment to each festival
+            {
+                text: 'This place is great, but I wish there was internet',
+                author: "Homer"
+            }
+        );
+        festival.comments.push(comment); //push the comment to comments array for each festival
+        festival.save(); //save each festival
+    };
+};
 
 module.exports = seedDB;
