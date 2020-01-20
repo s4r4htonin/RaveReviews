@@ -1,4 +1,4 @@
-<%- include("partials/header") %>
+<%- include("../partials/header") %>
 
 <!-- Festival Name -->
 <h1><%= festival.name %></h1>
@@ -9,9 +9,13 @@
 <!-- Festival Description -->
 <p><%= festival.description %></p>
 
+<p>
+    <a class="btn btn-success" href="/festivals">Go Back</a>
+    <a class="btn btn-success" href="/festivals/<%= festival._id %>/comments/new">Add a Review</a>
+</p>
 <!-- Comments -->
 <% festival.comments.forEach(function(comment){ %>
     <p><strong><%= comment.author %></strong> - <%= comment.text %></p>
 <% }); %>
 
-<%- include("partials/footer") %>
+<%- include("../partials/footer") %>

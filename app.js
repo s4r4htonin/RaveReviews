@@ -1,4 +1,6 @@
-//Definitions
+//~~~~~~~~~~~~~~~~~~//
+//    Definitions   //
+//~~~~~~~~~~~~~~~~~~//
 const   express    = require('express'),
         app        = express(),
         bodyParser = require("body-parser"),
@@ -6,24 +8,15 @@ const   express    = require('express'),
 
 //Models
 const Festival = require("./models/festival"),
-      Comment = require("./models/comment");
+      Comment  = require("./models/comment");
 
 //Database seed file (comment this out when done testing)
 const seedDB = require("./seeds");
 seedDB();
 
-//temporary array to hold already known festivals
-// let festivals = [
-//     { name: "Spring Awakening", image: "https://d2mv4ye331xrto.cloudfront.net/wp-content/uploads/2018/12/HEADER4-1200x631.jpg" },
-//     { name: "Electric Daisy Carnival", image: "https://www.youredm.com/wp-content/uploads/2019/05/Alex-Perez-for-Insomniac-Events-1.jpg" },
-//     { name: "TomorrowWorld", image: "https://cbsnews1.cbsistatic.com/hub/i/2014/11/24/c53f0c64-0545-4550-ab12-34cc491ea577/3.jpg" },
-//     { name: "Electric Forest", image: "http://downbeats.com/wp-content/uploads/Sherwood-Forest-EF.jpg" },
-//     { name: "Electric Zoo", image: "https://www.billboard.com/files/styles/article_main_image/public/media/02-Electric-Zoo-stage-production-graphic-billboard-1548.jpg" },
-//     { name: "îlesoniq", image: "https://dancingastronaut.com/wp-content/uploads/2018/08/ilesoniq-2016.jpg" },
-//     { name: "Ultra", image: "https://www.edmtunes.com/wp-content/uploads/2018/03/PH_0326_UMF01.jpg" },
-//     { name: "Movement", image: "https://www.youredm.com/wp-content/uploads/2018/06/34072640_1837611946261130_6042930109713743872_o-1050x600.jpg" },
-//     { name: "Second Sky", image: "https://i2.wp.com/thissongissick.com/wp-content/uploads/2019/06/Crowd.jpg?resize=750%2C422&quality=88&strip&ssl=1" }
-// ];
+//~~~~~~~~~~~~~~~~~~//
+//    App Config    //
+//~~~~~~~~~~~~~~~~~~//
 
 //Fix mongoose deprecation warnings
 mongoose.set('useNewUrlParser', true);
@@ -35,12 +28,18 @@ mongoose.connect("mongodb://localhost/rave_reviews"); //connect JS to MongoDB
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs"); //Tells express that /views are ejs files
 
+//~~~~~~~~~~~~~~~~~~//
+//      Routes      //
+//~~~~~~~~~~~~~~~~~~//
+
 //Home page
 app.get("/", function (req, res) {
     res.render("landing");
 });
 
-//RESTful Routes//
+//~~~~~~~~~~~~~~~~~~//
+// Festival Routes  //
+//~~~~~~~~~~~~~~~~~~//
 
 //INDEX - Show all festivals
 app.get("/festivals", function (req, res) {
@@ -48,7 +47,7 @@ app.get("/festivals", function (req, res) {
         if (err) {
             console.log(err);
         } else {
-            res.render("index", { festivals: allFestivals }); //render the festivals
+            res.render("festivals/index", { festivals: allFestivals }); //render the festivals
         }
     });
 });
@@ -72,7 +71,7 @@ app.post("/festivals", function (req, res) { //get data from form and add to fes
 
 //NEW - Display form to add a new festival
 app.get("/festivals/new", function (req, res) {
-    res.render("new");
+    res.render("festivals/new");
 });
 
 //SHOW - Show information about a single festival
@@ -81,10 +80,50 @@ app.get("/festivals/:id", function (req, res) {
         if (err){
             console.log(err);
         } else {
-            res.render("show", {festival: foundFestival}); //render show template with that festival
+            res.render("festivals/show", {festival: foundFestival}); //render show template with that festival
         }
     });
 });
+
+//~~~~~~~~~~~~~~~~~~//
+//  Comment Routes  //
+//~~~~~~~~~~~~~~~~~~//
+
+//NEW - Display form to add a new comment to an existing festival
+app.get("/festivals/:id/comments/new", function(req, res){
+    Festival.findById(req.params.id, function(err, foundFestival){ //find the festival with the provided ID and 
+        if (err){
+            console.log(err);
+        } else {
+            res.render("comments/new", {festival: foundFestival});
+        }
+    });
+});
+
+//CREATE - Add a comment to an existing festival
+app.post("/festivals/:id/comments", function(req, res){
+    Festival.findById(req.params.id, function(err, foundFestival){ //find the festival with the provided ID
+        if (err){
+            console.log(err);
+            res.redirect("/festivals"); //if festival not found, reload index of festivals
+        } else {
+            Comment.create(req.body.comment, function(err, newComment){ //create a new comment
+                if (err){
+                    console.log(err);
+                    res.redirect("/festivals/:id/comments/new"); //if error creating comment, reload form to add a comment
+                } else { 
+                    foundFestival.comments.push(newComment); //add the new comment as an association to the festival
+                    foundFestival.save(); //save the festival with the new comment
+                    res.redirect("/festivals/" + foundFestival._id); //redirect back to the festival
+                }
+            });
+        }
+    });
+});
+
+//~~~~~~~~~~~~~~~~~~//
+//   Start Server   //
+//~~~~~~~~~~~~~~~~~~//
 
 //Start server
 app.listen(3000, function () {
