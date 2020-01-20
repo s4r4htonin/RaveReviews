@@ -1,8 +1,11 @@
 //Definitions
-const express = require('express'),
-    app = express(),
-    bodyParser = require("body-parser"),
-    mongoose = require("mongoose");
+const   express    = require('express'),
+        app        = express(),
+        bodyParser = require("body-parser"),
+        mongoose   = require("mongoose");
+
+//Models
+const Festival = require("./models/festival");
 
 //temporary array to hold already known festivals
 // let festivals = [
@@ -26,14 +29,6 @@ mongoose.set('useUnifiedTopology', true);
 mongoose.connect("mongodb://localhost/rave_reviews"); //connect JS to MongoDB
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs"); //Tells express that /views are ejs files
-
-//Schema setup
-const festivalSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
-const Festival = mongoose.model("Festival", festivalSchema);
 
 //Home page
 app.get("/", function (req, res) {
