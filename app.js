@@ -27,6 +27,7 @@ mongoose.set('useUnifiedTopology', true);
 mongoose.connect("mongodb://localhost/rave_reviews"); //connect JS to MongoDB
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs"); //Tells express that /views are ejs files
+app.use(express.static(__dirname + "/public")); //Link CSS stylesheets to app, __dirname adds directory that folder lives in
 
 //~~~~~~~~~~~~~~~~~~//
 //      Routes      //

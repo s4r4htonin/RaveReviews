@@ -1,21 +1,45 @@
 <%- include("../partials/header") %>
 
-<!-- Festival Name -->
-<h1><%= festival.name %></h1>
-
-<!-- Image -->
-<img src="<%= festival.image %>" alt="">
-
-<!-- Festival Description -->
-<p><%= festival.description %></p>
-
-<p>
-    <a class="btn btn-success" href="/festivals">Go Back</a>
-    <a class="btn btn-success" href="/festivals/<%= festival._id %>/comments/new">Add a Review</a>
-</p>
-<!-- Comments -->
-<% festival.comments.forEach(function(comment){ %>
-    <p><strong><%= comment.author %></strong> - <%= comment.text %></p>
-<% }); %>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">RaveReviews</p>
+            <div class="list-group">
+                <li class="list-group-item active">Info 1</li>
+                <li class="list-group-item">Info 2</li>
+                <li class="list-group-item">Info 3</li>
+            </div>
+            <a class="btn btn-success" href="/festivals">View All Festivals</a>
+            <!-- Map goes here -->
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail">
+                <img class="img-responsive" src="<%= festival.image %>" alt="">
+                <div class="caption-full caption">
+                    <h4 class="pull-right">May 15th - 17th, 2020</h4> <!--Put cost or dates here-->
+                    <h4><a href=""><%= festival.name %></a></h4> <!--Will eventually link to festival website-->
+                    <p><%= festival.description %></p>
+                    <!-- Insert stars + review count -->
+                </div>
+            </div>
+            <div class="well">
+                <div class="text-right">
+                    <a class="btn btn-success" href="/festivals/<%= festival._id %>/comments/new">Leave a Review</a>
+                </div>
+                <hr>
+                <!-- Comments -->
+                <% festival.comments.forEach(function(comment){ %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong><%= comment.author %></strong> <!--Rating will go to left of author-->
+                            <span class="pull-right">10 days ago</span> <!--Will eventually be the date-->
+                            <p><%= comment.text %></p>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    </div>
+</div>
 
 <%- include("../partials/footer") %>
