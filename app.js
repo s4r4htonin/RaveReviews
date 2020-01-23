@@ -1,14 +1,17 @@
 //~~~~~~~~~~~~~~~~~~//
 //    Definitions   //
 //~~~~~~~~~~~~~~~~~~//
-const   express    = require('express'),
-        app        = express(),
-        bodyParser = require("body-parser"),
-        mongoose   = require("mongoose");
+const   express       = require('express'),
+        app           = express(),
+        bodyParser    = require("body-parser"),
+        mongoose      = require("mongoose"),
+        passport      = require("passport"),
+        localStrategy = require("passport-local");
 
 //Models
 const Festival = require("./models/festival"),
-      Comment  = require("./models/comment");
+      Comment  = require("./models/comment"),
+      User     = require("./models/user");
 
 //Database seed file (comment this out when done testing)
 const seedDB = require("./seeds");
@@ -18,16 +21,28 @@ seedDB();
 //    App Config    //
 //~~~~~~~~~~~~~~~~~~//
 
-//Fix mongoose deprecation warnings
+//Mongoose config
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-
 mongoose.connect("mongodb://localhost/rave_reviews"); //connect JS to MongoDB
-app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.urlencoded({ extended: true })); //allows express to pull data from forms using req.body._________
 app.set("view engine", "ejs"); //Tells express that /views are ejs files
 app.use(express.static(__dirname + "/public")); //Link CSS stylesheets to app, __dirname adds directory that folder lives in
+
+//Passport Config
+app.use(require("express-session")({
+    secret: "I love my kitty", 
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate())); //sets authentication to local, User.authenticate comes directly from passportLocalMongoose
+passport.serializeUser(User.serializeUser()); //comes directly from passportLocalMongoose
+passport.deserializeUser(User.deserializeUser()); //comes directly from passportLocalMongoose
 
 //~~~~~~~~~~~~~~~~~~//
 //      Routes      //
@@ -120,6 +135,46 @@ app.post("/festivals/:id/comments", function(req, res){
             });
         }
     });
+});
+
+//~~~~~~~~~~~~~~~~~~//
+//    Auth Routes   //
+//~~~~~~~~~~~~~~~~~~//
+
+//Registration//
+
+//NEW - Shows form to register new user
+app.get("/register", function(req, res){
+    res.render("register");
+});
+
+//CREATE - Add a new user to the database
+app.post("/register", function(req, res){
+    let newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function(err, user){ //try to add user
+        if (err){
+            console.log(err);
+            return res.render("register"); //if error, reload register page
+        }
+        passport.authenticate("local")(req, res, function(){  //if user creation successful, log user in and bring them to see all festivals
+            res.redirect("/festivals");
+        });
+    });
+});
+
+//Login//
+
+//Show login form
+app.get("/login", function(req, res){
+    res.render("login");
+});
+
+//Handling login logic
+app.post("/login", passport.authenticate("local", //middleware that authenticates user locally 
+    {
+        successRedirect: "/festivals", //if successful login, redirect to festivals page
+        failureRedirect: "/login"   //if unsuccessful login, reload login page
+    }), function(req, res){
 });
 
 //~~~~~~~~~~~~~~~~~~//
