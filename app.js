@@ -44,6 +44,12 @@ passport.use(new localStrategy(User.authenticate())); //sets authentication to l
 passport.serializeUser(User.serializeUser()); //comes directly from passportLocalMongoose
 passport.deserializeUser(User.deserializeUser()); //comes directly from passportLocalMongoose
 
+//Checks if someone is logged in on each page 
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user; //check if user
+    next(); //do whatever comes next
+});
+
 //~~~~~~~~~~~~~~~~~~//
 //      Routes      //
 //~~~~~~~~~~~~~~~~~~//
@@ -63,7 +69,7 @@ app.get("/festivals", function (req, res) {
         if (err) {
             console.log(err);
         } else {
-            res.render("festivals/index", { festivals: allFestivals }); //render the festivals
+            res.render("festivals/index", { festivals: allFestivals, currentUser: req.user }); //render the festivals, pass who is logged in to index.ejs
         }
     });
 });
@@ -106,7 +112,7 @@ app.get("/festivals/:id", function (req, res) {
 //~~~~~~~~~~~~~~~~~~//
 
 //NEW - Display form to add a new comment to an existing festival
-app.get("/festivals/:id/comments/new", function(req, res){
+app.get("/festivals/:id/comments/new", isLoggedIn, function(req, res){
     Festival.findById(req.params.id, function(err, foundFestival){ //find the festival with the provided ID and 
         if (err){
             console.log(err);
@@ -117,7 +123,7 @@ app.get("/festivals/:id/comments/new", function(req, res){
 });
 
 //CREATE - Add a comment to an existing festival
-app.post("/festivals/:id/comments", function(req, res){
+app.post("/festivals/:id/comments", isLoggedIn, function(req, res){
     Festival.findById(req.params.id, function(err, foundFestival){ //find the festival with the provided ID
         if (err){
             console.log(err);
@@ -176,6 +182,24 @@ app.post("/login", passport.authenticate("local", //middleware that authenticate
         failureRedirect: "/login"   //if unsuccessful login, reload login page
     }), function(req, res){
 });
+
+//Logout//
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/festivals");
+});
+
+//~~~~~~~~~~~~~~~~~~//
+//    Login Check   //
+//~~~~~~~~~~~~~~~~~~//
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    } else {
+        res.redirect("/login");
+    }
+}
 
 //~~~~~~~~~~~~~~~~~~//
 //   Start Server   //
