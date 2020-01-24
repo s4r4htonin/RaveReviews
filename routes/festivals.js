@@ -15,12 +15,21 @@ router.get("/", function (req, res) {
     });
 });
 
+//NEW - Display form to add a new festival
+router.get("/new", isLoggedIn, function (req, res) {
+    res.render("festivals/new");
+});
+
 //CREATE - Add a festival to the database
-router.post("/", function (req, res) { //get data from form and add to festivals array
+router.post("/", isLoggedIn, function (req, res) { //get data from form and add to festivals array
     let newFestival = {
         name: req.body.festivalName,
         image: req.body.imageUrl,
-        description: req.body.festivalDescription
+        description: req.body.festivalDescription,
+        author: {
+            id: req.user._id, //associate user with new festival
+            username: req.user.username
+        }
     };
     // Create a new festival and save to DB
     Festival.create(newFestival, function (err, newlyCreated) {
@@ -30,11 +39,6 @@ router.post("/", function (req, res) { //get data from form and add to festivals
             res.redirect("/festivals"); //redirect to /festivals 
         }
     });
-});
-
-//NEW - Display form to add a new festival
-router.get("/new", function (req, res) {
-    res.render("festivals/new");
 });
 
 //SHOW - Show information about a single festival
@@ -47,5 +51,14 @@ router.get("/:id", function (req, res) {
         }
     });
 });
+
+//Middleware
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    } else {
+        res.redirect("/login");
+    }
+}
 
 module.exports = router;
