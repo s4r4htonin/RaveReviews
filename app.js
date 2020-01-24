@@ -1,6 +1,7 @@
 //~~~~~~~~~~~~~~~~~~//
 //    Definitions   //
 //~~~~~~~~~~~~~~~~~~//
+
 const   express       = require('express'),
         app           = express(),
         bodyParser    = require("body-parser"),
@@ -20,7 +21,7 @@ const indexRoutes    = require("./routes/index"),
 
 //Database seed file (comment this out when done testing)
 const seedDB = require("./seeds");
-seedDB();
+// seedDB(); //seed the database
 
 //~~~~~~~~~~~~~~~~~~//
 //    App Config    //

@@ -31,7 +31,7 @@
                 <% festival.comments.forEach(function(comment){ %>
                     <div class="row">
                         <div class="col-md-12">
-                            <strong><%= comment.author %></strong> <!--Rating will go to left of author-->
+                            <strong><%= comment.author.username %></strong> <!--Rating will go to left of author-->
                             <span class="pull-right">10 days ago</span> <!--Will eventually be the date-->
                             <p><%= comment.text %></p>
                         </div>

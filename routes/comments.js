@@ -28,6 +28,9 @@ router.post("/", isLoggedIn, function(req, res){
                     console.log(err);
                     res.redirect("/festivals/:id/comments/new"); //if error creating comment, reload form to add a comment
                 } else { 
+                    newComment.author.id = req.user._id;//add id to comment
+                    newComment.author.username = req.user.username; //add username to comment
+                    newComment.save(); //save the new comment
                     foundFestival.comments.push(newComment); //add the new comment as an association to the festival
                     foundFestival.save(); //save the festival with the new comment
                     res.redirect("/festivals/" + foundFestival._id); //redirect back to the festival
