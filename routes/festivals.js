@@ -23,9 +23,9 @@ router.get("/new", isLoggedIn, function (req, res) {
 //CREATE - Add a festival to the database
 router.post("/", isLoggedIn, function (req, res) { //get data from form and add to festivals array
     let newFestival = {
-        name: req.body.festivalName,
-        image: req.body.imageUrl,
-        description: req.body.festivalDescription,
+        name: req.body.name,
+        image: req.body.image,
+        description: req.body.description,
         author: {
             id: req.user._id, //associate user with new festival
             username: req.user.username
@@ -48,6 +48,28 @@ router.get("/:id", function (req, res) {
             console.log(err);
         } else {
             res.render("festivals/show", {festival: foundFestival}); //render show template with that festival
+        }
+    });
+});
+
+//EDIT - Show form to edit an existing festival
+router.get("/:id/edit", function (req, res) {
+    Festival.findById(req.params.id, function(err, foundFestival){
+        if (err){
+            res.redirect("/festivals");
+        } else {
+            res.render("festivals/edit", {festival: foundFestival});
+        }
+    });
+});
+
+//UPDATE - Update an existing festival
+router.put("/:id", function (req, res){
+    Festival.findByIdAndUpdate(req.params.id, req.body.festival, function(err, updatedFestival){
+        if (err){
+            res.redirect("/festivals");
+        } else {
+            res.redirect("/festivals/" + req.params.id);
         }
     });
 });

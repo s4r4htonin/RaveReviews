@@ -2,12 +2,13 @@
 //    Definitions   //
 //~~~~~~~~~~~~~~~~~~//
 
-const   express       = require('express'),
-        app           = express(),
-        bodyParser    = require("body-parser"),
-        mongoose      = require("mongoose"),
-        passport      = require("passport"),
-        localStrategy = require("passport-local");
+const   express        = require('express'),
+        app            = express(),
+        bodyParser     = require("body-parser"),
+        mongoose       = require("mongoose"),
+        passport       = require("passport"),
+        localStrategy  = require("passport-local"),
+        methodOverride = require("method-override");
 
 //Models
 const Festival = require("./models/festival"),
@@ -37,6 +38,7 @@ mongoose.connect("mongodb://localhost/rave_reviews"); //connect JS to MongoDB
 app.use(bodyParser.urlencoded({ extended: true })); //allows express to pull data from forms using req.body._________
 app.set("view engine", "ejs"); //Tells express that /views are ejs files
 app.use(express.static(__dirname + "/public")); //Link CSS stylesheets to app, __dirname adds directory that folder lives in
+app.use(methodOverride("_method")); //allow PUT requests to update existing data through a form
 
 //Passport Config
 app.use(require("express-session")({

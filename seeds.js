@@ -58,6 +58,7 @@ async function seedDB() {
     await Festival.deleteMany({}); //remove all festivals from the database
     await Comment.deleteMany({}); //remove all comments from the database
 
+    //Add same, fake comment to each seeded festival
     for(const seed of seeds) {
         let festival = await Festival.create(seed); //create each festival in seeds array
         let comment = await Comment.create( //add the same comment to each festival

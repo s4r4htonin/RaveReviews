@@ -20,6 +20,7 @@
                     <h4><a href=""><%= festival.name %></a></h4> <!--Will eventually link to festival website-->
                     <p><%= festival.description %></p>
                     <p><em>Submitted by <%= festival.author.username %></em></p>
+                    <button class="btn btn-warning"><a href="/festivals/<%= festival._id %>/edit">Edit</a></button>
                     <!-- Insert stars + review count -->
                 </div>
             </div>
