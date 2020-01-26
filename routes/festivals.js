@@ -2,7 +2,8 @@ const express = require("express"),
       router  = express.Router();
 
 //Models
-const Festival = require("../models/festival");
+const Festival = require("../models/festival"),
+      Comment  = require("../models/comment");
 
 //INDEX - Show all festivals
 router.get("/", function (req, res) {
@@ -80,7 +81,13 @@ router.delete("/:id", function (req, res){
         if (err) {
             res.redirect("/festivals");
         } else {
-            res.redirect("/festivals");
+            Comment.deleteMany({_id: { $in: deletedFestival.comments}}, (err) => { //delete all comments associated with the festival from database
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.redirect("/festivals");
+                }
+            });
         }
     });
 });
