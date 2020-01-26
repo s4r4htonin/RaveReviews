@@ -54,18 +54,14 @@ router.get("/:id", function (req, res) {
 });
 
 //EDIT - Show form to edit an existing festival
-router.get("/:id/edit", function (req, res) {
-    Festival.findById(req.params.id, function(err, foundFestival){
-        if (err){
-            res.redirect("/festivals");
-        } else {
-            res.render("festivals/edit", {festival: foundFestival});
-        }
+router.get("/:id/edit", checkAuthorization, function (req, res) { //check authorization and load edit form
+    Festival.findById(req.params.id, function(err, foundFestival){ //only gets here if user is authorized via middleware function checkAuthorization
+        res.render("festivals/edit", {festival: foundFestival}); 
     });
 });
 
 //UPDATE - Update an existing festival
-router.put("/:id", function (req, res){
+router.put("/:id", checkAuthorization, function (req, res){
     Festival.findByIdAndUpdate(req.params.id, req.body.festival, function(err, updatedFestival){
         if (err){
             res.redirect("/festivals");
@@ -76,7 +72,7 @@ router.put("/:id", function (req, res){
 });
 
 //DESTROY - Deletes an existing festival
-router.delete("/:id", function (req, res){
+router.delete("/:id", checkAuthorization, function (req, res){
     Festival.findByIdAndDelete(req.params.id, function(err, deletedFestival){
         if (err) {
             res.redirect("/festivals");
@@ -93,11 +89,32 @@ router.delete("/:id", function (req, res){
 });
 
 //Middleware
+
+//Authentication
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
         return next();
     } else {
         res.redirect("/login");
+    }
+}
+
+//Authorization
+function checkAuthorization(req, res, next) {
+    if(req.isAuthenticated()) { //Check if user is logged in
+        Festival.findById(req.params.id, function(err, foundFestival){
+            if (err){
+                res.redirect("back");
+            } else {
+                if (foundFestival.author.id.equals(req.user._id)) { //Check if user is authorized to edit the festival (must be creator), must use .equals() method bc one is string and other is object
+                    next(); //executes next code after middleware
+                } else {
+                    res.redirect("back");
+                }
+            }
+        });
+    } else {
+        res.redirect("back"); //redirect to previous page
     }
 }
 

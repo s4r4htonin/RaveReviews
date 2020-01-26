@@ -20,10 +20,12 @@
                     <h4><a href=""><%= festival.name %></a></h4> <!--Will eventually link to festival website-->
                     <p><%= festival.description %></p>
                     <p><em>Submitted by <%= festival.author.username %></em></p>
-                    <button class="btn btn-warning"><a href="/festivals/<%= festival._id %>/edit">Edit</a></button>
-                    <form id="deleteForm" action="/festivals/<%= festival._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
+                    <% if (currentUser && festival.author.id.equals(currentUser._id)){ %>
+                        <button class="btn btn-warning"><a href="/festivals/<%= festival._id %>/edit">Edit</a></button>
+                        <form id="deleteForm" action="/festivals/<%= festival._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    <% } %>
                     <!-- Insert stars + review count -->
                 </div>
             </div>
