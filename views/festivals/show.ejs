@@ -21,6 +21,9 @@
                     <p><%= festival.description %></p>
                     <p><em>Submitted by <%= festival.author.username %></em></p>
                     <button class="btn btn-warning"><a href="/festivals/<%= festival._id %>/edit">Edit</a></button>
+                    <form id="deleteForm" action="/festivals/<%= festival._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
                     <!-- Insert stars + review count -->
                 </div>
             </div>

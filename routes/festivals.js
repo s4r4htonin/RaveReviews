@@ -74,6 +74,17 @@ router.put("/:id", function (req, res){
     });
 });
 
+//DESTROY - Deletes an existing festival
+router.delete("/:id", function (req, res){
+    Festival.findByIdAndDelete(req.params.id, function(err, deletedFestival){
+        if (err) {
+            res.redirect("/festivals");
+        } else {
+            res.redirect("/festivals");
+        }
+    });
+});
+
 //Middleware
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
