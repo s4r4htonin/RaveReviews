@@ -40,6 +40,28 @@ router.post("/", isLoggedIn, function(req, res){
     });
 });
 
+//EDIT - Display form to edit a comment
+router.get("/:comment_id/edit", function(req, res){ //cannot have two /:ids
+    Comment.findById(req.params.comment_id, function(err, foundComment){
+        if (err){
+            res.redirect("back");
+        } else {
+            res.render("comments/edit", {festival_id: req.params.id, comment: foundComment}); //can easily get id of festival, need to look up comment
+        }
+    });
+});
+
+//UPDATE - Update with edited comment
+router.put("/:comment_id", function(req, res){
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){ //req.body.comment = comment text from form
+        if (err){
+            res.redirect("back");
+        } else {
+            res.redirect("/festivals/" + req.params.id); //redirect to show page for festival
+        }
+    });
+});
+
 //Middleware
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){

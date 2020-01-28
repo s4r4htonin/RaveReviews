@@ -41,6 +41,10 @@
                             <strong><%= comment.author.username %></strong> <!--Rating will go to left of author-->
                             <span class="pull-right">10 days ago</span> <!--Will eventually be the date-->
                             <p><%= comment.text %></p>
+                            <a class="btn btn-xs btn-warning" href="/festivals/<%= festival._id %>/comments/<%= comment._id %>/edit">Edit</a>
+                            <form id="deleteForm" action="/festivals/<%= festival._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST"> <!--Need to change id?-->
+                                <button class="btn btn-xs btn-danger">Delete</button> 
+                            </form>
                         </div>
                     </div>
                 <% }); %>
