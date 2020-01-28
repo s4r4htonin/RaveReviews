@@ -5,8 +5,11 @@ const express = require("express"),
 const Festival = require("../models/festival"),
       Comment  = require("../models/comment");
 
+//Middleware
+const middleware = require("../middleware"); //Check authentication and authorization on required routes
+
 //NEW - Display form to add a new comment to an existing festival
-router.get("/new", isLoggedIn, function(req, res){
+router.get("/new", middleware.isLoggedIn, function(req, res){
     Festival.findById(req.params.id, function(err, foundFestival){ //find the festival with the provided ID and 
         if (err){
             console.log(err);
@@ -17,7 +20,7 @@ router.get("/new", isLoggedIn, function(req, res){
 });
 
 //CREATE - Add a comment to an existing festival
-router.post("/", isLoggedIn, function(req, res){
+router.post("/", middleware.isLoggedIn, function(req, res){
     Festival.findById(req.params.id, function(err, foundFestival){ //find the festival with the provided ID
         if (err){
             console.log(err);
@@ -41,7 +44,7 @@ router.post("/", isLoggedIn, function(req, res){
 });
 
 //EDIT - Display form to edit a comment
-router.get("/:comment_id/edit", checkCommentAuthorization, function(req, res){ //cannot have two /:ids
+router.get("/:comment_id/edit", middleware.checkCommentAuthorization, function(req, res){ //cannot have two /:ids
     Comment.findById(req.params.comment_id, function(err, foundComment){
         if (err){
             res.redirect("back");
@@ -52,7 +55,7 @@ router.get("/:comment_id/edit", checkCommentAuthorization, function(req, res){ /
 });
 
 //UPDATE - Update with edited comment
-router.put("/:comment_id", checkCommentAuthorization, function(req, res){
+router.put("/:comment_id", middleware.checkCommentAuthorization, function(req, res){
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){ //req.body.comment = comment text from form
         if (err){
             res.redirect("back");
@@ -63,7 +66,7 @@ router.put("/:comment_id", checkCommentAuthorization, function(req, res){
 });
 
 //DESTROY - Delete a comment
-router.delete("/:comment_id", checkCommentAuthorization, function(req, res){
+router.delete("/:comment_id", middleware.checkCommentAuthorization, function(req, res){
     Comment.findByIdAndDelete(req.params.comment_id, function(err, deletedComment){ //find and delete the comment 
         if (err){
             res.redirect("back");
@@ -72,35 +75,5 @@ router.delete("/:comment_id", checkCommentAuthorization, function(req, res){
         }
     });
 });
-
-//Middleware
-
-//Authentication
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    } else {
-        res.redirect("/login");
-    }
-}
-
-//Authorization
-function checkCommentAuthorization(req, res, next) {
-    if(req.isAuthenticated()) { //Check if user is logged in
-        Comment.findById(req.params.comment_id, function(err, foundComment){
-            if (err){
-                res.redirect("back");
-            } else {
-                if (foundComment.author.id.equals(req.user._id)) { //Check if user is authorized to edit the comment (must be creator), must use .equals() method bc one is string and other is object
-                    next(); //executes next code after middleware
-                } else {
-                    res.redirect("back");
-                }
-            }
-        });
-    } else {
-        res.redirect("back"); //redirect to previous page
-    }
-}
 
 module.exports = router;
