@@ -6,6 +6,6 @@
     width: 100%;
 }
 
-#deleteForm {
+.deleteForm {
     display: inline;
 }
