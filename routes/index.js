@@ -49,6 +49,7 @@ router.post("/login", passport.authenticate("local", //middleware that authentic
 //Logout//
 router.get("/logout", function(req, res){
     req.logout();
+    req.flash("success", "Successfully logged out"); //flash logout message upon redirect
     res.redirect("/festivals");
 });
 
