@@ -5,6 +5,7 @@ const festivalSchema = new mongoose.Schema({
     name: String,
     image: String,
     description: String,
+    dates: String,
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId, //associate user with festival

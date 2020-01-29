@@ -16,7 +16,7 @@
             <div class="thumbnail">
                 <img class="img-responsive" src="<%= festival.image %>" alt="">
                 <div class="caption-full caption">
-                    <h4 class="pull-right">May 15th - 17th, 2020</h4> <!--Put cost or dates here-->
+                    <h4 class="pull-right"><%= festival.dates %></h4> <!--Put cost or dates here-->
                     <h4><a href=""><%= festival.name %></a></h4> <!--Will eventually link to festival website-->
                     <p><%= festival.description %></p>
                     <p><em>Submitted by <%= festival.author.username %></em></p>

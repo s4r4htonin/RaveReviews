@@ -41,7 +41,7 @@ body {
 
 /* Slideshow images */
 .slideshow li:nth-child(1) { 
-    background-image: url(https://images.unsplash.com/photo-1545165230-00d5c6012a01?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60) 
+    background-image: url(https://images.unsplash.com/photo-1578946956271-e8234ecaaadd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=749&q=80) 
   }
   .slideshow li:nth-child(2) { 
     background-image: url(https://images.unsplash.com/photo-1506157786151-b8491531f063?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80);
