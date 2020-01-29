@@ -23,11 +23,13 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
 router.post("/", middleware.isLoggedIn, function(req, res){
     Festival.findById(req.params.id, function(err, foundFestival){ //find the festival with the provided ID
         if (err){
+            req.flash("error", "Please try again.");
             console.log(err);
             res.redirect("/festivals"); //if festival not found, reload index of festivals
         } else {
             Comment.create(req.body.comment, function(err, newComment){ //create a new comment
                 if (err){
+                    req.flash("error", "Please try again.");
                     console.log(err);
                     res.redirect("/festivals/:id/comments/new"); //if error creating comment, reload form to add a comment
                 } else { 
@@ -47,6 +49,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 router.get("/:comment_id/edit", middleware.checkCommentAuthorization, function(req, res){ //cannot have two /:ids
     Comment.findById(req.params.comment_id, function(err, foundComment){
         if (err){
+            req.flash("error", "Comment not found. Please try again");
             res.redirect("back");
         } else {
             res.render("comments/edit", {festival_id: req.params.id, comment: foundComment}); //can easily get id of festival, need to look up comment
@@ -58,6 +61,7 @@ router.get("/:comment_id/edit", middleware.checkCommentAuthorization, function(r
 router.put("/:comment_id", middleware.checkCommentAuthorization, function(req, res){
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){ //req.body.comment = comment text from form
         if (err){
+            req.flash("error", "Please try again.");
             res.redirect("back");
         } else {
             res.redirect("/festivals/" + req.params.id); //redirect to show page for festival
@@ -69,8 +73,10 @@ router.put("/:comment_id", middleware.checkCommentAuthorization, function(req, r
 router.delete("/:comment_id", middleware.checkCommentAuthorization, function(req, res){
     Comment.findByIdAndDelete(req.params.comment_id, function(err, deletedComment){ //find and delete the comment 
         if (err){
+            req.flash("error", "Please try again.");
             res.redirect("back");
         } else {
+            req.flash("success", "Review successfully deleted.");
             res.redirect("/festivals/" + req.params.id); //redirect to show page for festival
         }
     });

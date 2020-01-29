@@ -12,6 +12,7 @@ const middleware = require("../middleware"); //Check authentication and authoriz
 router.get("/", function (req, res) {
     Festival.find({}, function (err, allFestivals) { //get all the festivals from the DB
         if (err) {
+            req.flash("error", "Please try again");
             console.log(err);
         } else {
             res.render("festivals/index", { festivals: allFestivals, currentUser: req.user }); //render the festivals, pass who is logged in to index.ejs
@@ -38,8 +39,10 @@ router.post("/", middleware.isLoggedIn, function (req, res) { //get data from fo
     // Create a new festival and save to DB
     Festival.create(newFestival, function (err, newlyCreated) {
         if (err) {
+            req.flash("error", "Festival not created. Please try again.");
             console.log(err);
         } else {
+            req.flash("success", "Festival successfully created");
             res.redirect("/festivals"); //redirect to /festivals 
         }
     });
@@ -49,6 +52,7 @@ router.post("/", middleware.isLoggedIn, function (req, res) { //get data from fo
 router.get("/:id", function (req, res) {
     Festival.findById(req.params.id).populate("comments").exec(function(err, foundFestival){ //find the festival with the provided ID and populate comments
         if (err){
+            req.flash("error", "Festival not found");
             console.log(err);
         } else {
             res.render("festivals/show", {festival: foundFestival}); //render show template with that festival
@@ -67,6 +71,7 @@ router.get("/:id/edit", middleware.checkFestivalAuthorization, function (req, re
 router.put("/:id", middleware.checkFestivalAuthorization, function (req, res){
     Festival.findByIdAndUpdate(req.params.id, req.body.festival, function(err, updatedFestival){
         if (err){
+            req.flash("error", "Festival update unsuccessful. Please try again.");
             res.redirect("/festivals");
         } else {
             res.redirect("/festivals/" + req.params.id);
@@ -78,8 +83,10 @@ router.put("/:id", middleware.checkFestivalAuthorization, function (req, res){
 router.delete("/:id", middleware.checkFestivalAuthorization, function (req, res){
     Festival.findByIdAndDelete(req.params.id, function(err, deletedFestival){
         if (err) {
+            req.flash("error", "Festival deletion unsuccessful. Please try again.");
             res.redirect("/festivals");
         } else {
+            req.flash("success", "Festival successfully deleted");
             Comment.deleteMany({_id: { $in: deletedFestival.comments}}, (err) => { //delete all comments associated with the festival from database
                 if (err) {
                     console.log(err);

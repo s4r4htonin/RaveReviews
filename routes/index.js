@@ -22,10 +22,10 @@ router.post("/register", function(req, res){
     let newUser = new User({username: req.body.username});
     User.register(newUser, req.body.password, function(err, user){ //try to add user
         if (err){
-            console.log(err);
-            return res.render("register"); //if error, reload register page
+            return res.render("register", {"error": err.message}); //if error, reload register page and flash error message (user already created, etc.)
         }
         passport.authenticate("local")(req, res, function(){  //if user creation successful, log user in and bring them to see all festivals
+            req.flash("success", "Successfully signed up as " + user.username);
             res.redirect("/festivals");
         });
     });
@@ -42,7 +42,8 @@ router.get("/login", function(req, res){
 router.post("/login", passport.authenticate("local", //middleware that authenticates user locally 
     {
         successRedirect: "/festivals", //if successful login, redirect to festivals page
-        failureRedirect: "/login"   //if unsuccessful login, reload login page
+        failureRedirect: "/login",   //if unsuccessful login, reload login page
+        failureFlash: true //flashes an error message if unsuccessful login
     }), function(req, res){
 });
 
@@ -52,14 +53,5 @@ router.get("/logout", function(req, res){
     req.flash("success", "Successfully logged out"); //flash logout message upon redirect
     res.redirect("/festivals");
 });
-
-//Middleware
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    } else {
-        res.redirect("/login");
-    }
-}
 
 module.exports = router;
