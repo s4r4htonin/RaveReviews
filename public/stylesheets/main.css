@@ -9,3 +9,20 @@
 .deleteForm {
     display: inline;
 }
+
+.jumbotron {
+    width: 100%;
+    height: 100%;
+    background-size: cover; 
+    background-position: 50% 50%; 
+    background-repeat: no-repeat;
+    background-image: url(https://cdn.shopify.com/s/files/1/0982/0722/articles/plur-yaya_2de513e8-a7fd-4c65-ba45-f178c0554f6d_1024x1024.jpg?v=1570803595);
+    z-index: 0;
+    opacity: 0.9;
+}
+
+.jumbotron .container {
+    text-align: center;
+    color:  rgb(0, 0, 0);
+    z-index: 1;
+}
