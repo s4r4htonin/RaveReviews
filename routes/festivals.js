@@ -51,9 +51,9 @@ router.post("/", middleware.isLoggedIn, function (req, res) { //get data from fo
 //SHOW - Show information about a single festival
 router.get("/:id", function (req, res) {
     Festival.findById(req.params.id).populate("comments").exec(function(err, foundFestival){ //find the festival with the provided ID and populate comments
-        if (err){
+        if (err || !foundFestival){ //!foundFestival fixes bug when editing id in browser 
             req.flash("error", "Festival not found");
-            console.log(err);
+            res.redirect("back"); //redirect back to index of festivals
         } else {
             res.render("festivals/show", {festival: foundFestival}); //render show template with that festival
         }

@@ -8,7 +8,7 @@ const middlewareObj = {};
 middlewareObj.checkFestivalAuthorization = function (req, res, next) {
     if (req.isAuthenticated()) { //Check if user is logged in
         Festival.findById(req.params.id, function (err, foundFestival) {
-            if (err) {
+            if (err || !foundFestival) {
                 req.flash("error", "Festival not found");
                 res.redirect("back");
             } else {
@@ -29,8 +29,8 @@ middlewareObj.checkFestivalAuthorization = function (req, res, next) {
 middlewareObj.checkCommentAuthorization = function (req, res, next) {
     if (req.isAuthenticated()) { //Check if user is logged in
         Comment.findById(req.params.comment_id, function (err, foundComment) {
-            if (err) {
-                req.flash("error", "Festival not found");
+            if (err || !foundComment) {
+                req.flash("error", "Comment not found");
                 res.redirect("back");
             } else {
                 if (foundComment.author.id.equals(req.user._id)) { //Check if user is authorized to edit the comment (must be creator), must use .equals() method bc one is string and other is object

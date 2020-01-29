@@ -47,13 +47,19 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 
 //EDIT - Display form to edit a comment
 router.get("/:comment_id/edit", middleware.checkCommentAuthorization, function(req, res){ //cannot have two /:ids
-    Comment.findById(req.params.comment_id, function(err, foundComment){
-        if (err){
-            req.flash("error", "Comment not found. Please try again");
-            res.redirect("back");
-        } else {
-            res.render("comments/edit", {festival_id: req.params.id, comment: foundComment}); //can easily get id of festival, need to look up comment
+    Festival.findById(req.params.id, function(err, foundFestival){ //fixes bug where user can break app by changing festival id to invalid id
+        if (err || !foundFestival){
+            req.flash("error", "Festival not found");
+            return res.redirect("back"); //use return if not using if/else statement
         }
+        Comment.findById(req.params.comment_id, function(err, foundComment){
+            if (err || !foundComment){
+                req.flash("error", "Comment not found. Please try again");
+                res.redirect("back");
+            } else {
+                res.render("comments/edit", {festival_id: req.params.id, comment: foundComment}); //can easily get id of festival, need to look up comment
+            }
+        });
     });
 });
 
