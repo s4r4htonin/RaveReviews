@@ -72,6 +72,6 @@ app.use("/festivals/:id/comments", commentRoutes);
 //~~~~~~~~~~~~~~~~~~//
 
 //Start server
-app.listen(3000, function () {
+app.listen(process.env.PORT || 3000, function () {
     console.log("Server started on port 3000");
 });
