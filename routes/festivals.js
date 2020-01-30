@@ -29,6 +29,7 @@ router.get("/new", middleware.isLoggedIn, function (req, res) {
 router.post("/", middleware.isLoggedIn, function (req, res) { //get data from form and add to festivals array
     let newFestival = {
         name: req.body.name,
+        website: req.body.website,
         dates: req.body.dates,
         image: req.body.image,
         description: req.body.description,

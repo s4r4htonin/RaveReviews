@@ -17,7 +17,7 @@
                 <img class="img-responsive" src="<%= festival.image %>" alt="">
                 <div class="caption-full caption">
                     <h4 class="pull-right"><%= festival.dates %></h4> <!--Put cost or dates here-->
-                    <h4><a href=""><%= festival.name %></a></h4> <!--Will eventually link to festival website-->
+                    <h4><a href="<%= festival.website %>"><%= festival.name %></a></h4>
                     <p><%= festival.description %></p>
                     <p><em>Submitted by <%= festival.author.username %></em></p>
                     <% if (currentUser && festival.author.id.equals(currentUser._id)){ %> <!--Only show edit/delete buttons if festival created by currently logged in user-->
