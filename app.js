@@ -65,7 +65,7 @@ app.use(function(req, res, next){
 //Tells app to use routes exported from route files
 app.use("/", indexRoutes);
 app.use("/festivals", festivalRoutes); //adds /festivals as the prefix to every route coming in from festivalRoutes
-app.use("/festivals/:id/comments", commentRoutes); 
+app.use("/festivals/:id/comments", commentRoutes);
 
 //~~~~~~~~~~~~~~~~~~//
 //   Start Server   //

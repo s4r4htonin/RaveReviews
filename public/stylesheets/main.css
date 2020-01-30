@@ -1,3 +1,15 @@
+body {
+ background-color: rgba(223, 223, 223, 0.698);
+}
+
+form {
+    text-align: center;
+}
+
+.container h1 {
+    text-align: center;
+}
+
 .thumbnail {
     padding: 0;
 }
@@ -18,11 +30,12 @@
     background-repeat: no-repeat;
     background-image: url(https://cdn.shopify.com/s/files/1/0982/0722/articles/plur-yaya_2de513e8-a7fd-4c65-ba45-f178c0554f6d_1024x1024.jpg?v=1570803595);
     z-index: 0;
-    opacity: 0.9;
+    opacity: 0.8;
 }
 
 .jumbotron .container {
     text-align: center;
     color:  rgb(0, 0, 0);
     z-index: 1;
+    opacity: 1;
 }
