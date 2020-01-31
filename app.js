@@ -34,7 +34,8 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect(process.env.DATABASEURL); //connect to MongoDB
+let url = process.env.DATABASEURL || "mongodb://localhost/rave_reviews"; //connect to defined route or backup local route
+mongoose.connect(url); //connect to MongoDB
 
 app.use(bodyParser.urlencoded({ extended: true })); //allows express to pull data from forms using req.body._________
 app.set("view engine", "ejs"); //Tells express that /views are ejs files
