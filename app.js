@@ -42,6 +42,7 @@ app.set("view engine", "ejs"); //Tells express that /views are ejs files
 app.use(express.static(__dirname + "/public")); //Link CSS stylesheets to app, __dirname adds directory that folder lives in
 app.use(methodOverride("_method")); //allow PUT/DELETE requests to update existing data through a form
 app.use(flash()); //use connect-flash to flash alert messages for specific errors
+app.locals.moment = require("moment"); //require moment js and set view files to recognize it via moment variable
 
 //Passport Config
 app.use(require("express-session")({

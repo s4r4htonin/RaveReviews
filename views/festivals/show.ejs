@@ -19,7 +19,7 @@
                     <h4 class="pull-right"><%= festival.dates %></h4> <!--Put cost or dates here-->
                     <h4><a href="<%= festival.website %>"><%= festival.name %></a></h4>
                     <p><%= festival.description %></p>
-                    <p><em>Submitted by <%= festival.author.username %></em></p>
+                    <p><em>Submitted by <%= festival.author.username %>, <%= moment(festival.createdAt).fromNow() %></em></p> <!--Show creation author and date/time created at-->
                     <% if (currentUser && festival.author.id.equals(currentUser._id)){ %> <!--Only show edit/delete buttons if festival created by currently logged in user-->
                         <button class="btn btn-warning"><a href="/festivals/<%= festival._id %>/edit">Edit</a></button>
                         <form class="deleteForm" action="/festivals/<%= festival._id %>?_method=DELETE" method="POST">
@@ -39,7 +39,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <strong><%= comment.author.username %></strong> <!--Rating will go to left of author-->
-                            <span class="pull-right">10 days ago</span> <!--Will eventually be the date-->
+                            <span class="pull-right"><%= moment(festival.createdAt).fromNow() %></span> <!--Date/time comment was posted-->
                             <p><%= comment.text %></p>
                             <% if (currentUser && comment.author.id.equals(currentUser._id)){ %> <!--Only show edit/delete buttons for comments made by user currently logged in-->
                                 <a class="btn btn-xs btn-warning" href="/festivals/<%= festival._id %>/comments/<%= comment._id %>/edit">Edit</a>
