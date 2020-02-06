@@ -6,6 +6,14 @@ form {
     text-align: center;
 }
 
+li a {
+    color: white;
+}
+
+li a:hover {
+    color: whitesmoke;
+}
+
 .container h1 {
     text-align: center;
 }
@@ -39,3 +47,4 @@ form {
     z-index: 1;
     opacity: 1;
 }
+
