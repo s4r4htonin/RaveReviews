@@ -9,7 +9,6 @@
                 <li class="list-group-item">Location: <%= festival.location %></li>
                 <li class="list-group-item">Established: <%= festival.established %></li>
             </div>
-            <a class="btn btn-success" href="/festivals">View All Festivals</a>
             <!-- Map goes here -->
         </div>
         <div class="col-md-9">
@@ -30,8 +29,9 @@
                 </div>
             </div>
             <div class="well">
-                <div class="text-right">
-                    <a class="btn btn-success" href="/festivals/<%= festival._id %>/comments/new">Leave a Review</a>
+                <div>
+                    <a class="btn btn-success" href="/festivals">View All Festivals</a>
+                    <span class="pull-right"><a class="btn btn-success" href="/festivals/<%= festival._id %>/comments/new">Leave a Review</a></span>
                 </div>
                 <hr>
                 <!-- Comments -->
