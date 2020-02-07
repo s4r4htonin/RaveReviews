@@ -6,12 +6,12 @@ form {
     text-align: center;
 }
 
-li a {
+.festivalUrl {
     color: white;
 }
 
-li a:hover {
-    color: whitesmoke;
+.festivalUrl:hover {
+    color: white;
 }
 
 .container h1 {

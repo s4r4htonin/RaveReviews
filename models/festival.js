@@ -6,7 +6,9 @@ const festivalSchema = new mongoose.Schema({
     image: String,
     description: String,
     dates: String,
+    established: Number,
     website: String,
+    location: String,
     createdAt: { type: Date, default: Date.now }, //add creation date for festival
     author: {
         id: {

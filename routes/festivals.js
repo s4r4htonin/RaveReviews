@@ -30,7 +30,9 @@ router.post("/", middleware.isLoggedIn, function (req, res) { //get data from fo
     let newFestival = {
         name: req.body.name,
         website: req.body.website,
+        location: req.body.location,
         dates: req.body.dates,
+        established: req.body.established,
         image: req.body.image,
         description: req.body.description,
         author: {
