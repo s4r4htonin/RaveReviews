@@ -63,3 +63,7 @@ form {
     display: flex;
     flex-wrap: wrap;
 }
+
+.paddingBottom {
+    padding-bottom: 15px;
+}
