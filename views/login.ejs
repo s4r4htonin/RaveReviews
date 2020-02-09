@@ -6,15 +6,18 @@
         <div class="formStyling">
             <form action="/login" method="POST">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="username" placeholder="username">
+                    <label class="pull-left" for="username">Username</label>
+                    <input class="form-control" type="text" name="username">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="password" name="password" placeholder="password">
+                    <label class="pull-left" for="password">Password</label>
+                    <input class="form-control" type="password" name="password">
                 </div>
                 <div class="form-group">
                     <button class="btn bnt-lg btn-primary btn-block">Log In</button>
                 </div>
             </form>
+            <a class="btn btn-sm btn-primary" href="/forgot">Forgot Password</a>
             <a href="/festivals">Go Back</a>
         </div>
     </div>

@@ -6,13 +6,20 @@
         <div class="formStyling">
             <form action="/register" method="POST">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="username" placeholder="username" required>
+                    <label class="pull-left" for="email">Email</label>
+                    <input type="email" name="email" autofocus class="form-control">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="password" name="password" placeholder="password" required>
+                    <label class="pull-left" for="username">Username</label>
+                    <input class="form-control" type="text" name="username" required>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="adminCode" placeholder="admin code (optional)">
+                    <label class="pull-left" for="password">Password</label>
+                    <input class="form-control" type="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label class="pull-left" for="email">Admin Code</label>
+                    <input class="form-control" type="text" name="adminCode" placeholder="optional">
                 </div>
                 <div class="form-group">
                     <button class="btn bnt-lg btn-primary btn-block">Sign Up</button>

@@ -3,8 +3,11 @@ const mongoose = require("mongoose"),
 
 //Schema set up
 const userSchema = new mongoose.Schema({
-    username: String,
+    email: {type: String, unique: true, required: true}, //would not work if {required: true} was set
+    username: {type: String, unique: true, required: true},
     password: String,
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
     isAdmin: {type: Boolean, default: false} 
 });
 

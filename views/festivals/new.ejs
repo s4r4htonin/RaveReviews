@@ -6,26 +6,33 @@
         <div class="formStyling"">
             <form action="/festivals" method="POST">
                 <div class="form-group">
-                    <input class="form-control" type="text" placeholder="festival name" name="name">
+                    <label class="pull-left" for="name">Festival Name</label>
+                    <input class="form-control" type="text" name="name">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" placeholder="website url" name="website">
+                    <label class="pull-left" for="website">Website Url</label>
+                    <input class="form-control" type="text" name="website">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" placeholder="location (city, state)" name="location">
+                    <label class="pull-left" for="location">Location</label>
+                    <input class="form-control" type="text" placeholder="ex: Las Vegas, NV" name="location">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" placeholder="festival dates (ex: May 15-17, 2020)" name="dates">
+                    <label class="pull-left" for="dates">Festival Dates</label>
+                    <input class="form-control" type="text" placeholder="ex: May 15-17, 2020" name="dates">
                     <!-- Edit later to have dropdown for dates -->
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" placeholder="year established" name="established">
+                    <label class="pull-left" for="established">Year Established</label>
+                    <input class="form-control" type="text" placeholder="ex: 2012" name="established">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" placeholder="image url" name="image">
+                    <label class="pull-left" for="image">Image Url</label>
+                    <input class="form-control" type="text" name="image">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" placeholder="description" name="description">
+                    <label class="pull-left" for="description">Festival Description</label>
+                    <textarea class="form-control" name="description"></textarea>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-lg btn-primary btn-block">Submit</button>
