@@ -29,14 +29,11 @@ form {
 
 .thumbnail {
     padding: 0;
-    height: 100%;
-    overflow: auto;
 }
 
 .thumbnail img {
     width: 100%;
     height: auto;
-    display: block;
 }
 
 .deleteForm {
@@ -59,9 +56,4 @@ form {
     color:  rgb(0, 0, 0);
     z-index: 1;
     opacity: 1;
-}
-
-.row .display-flex {
-    display: flex;
-    flex-wrap: wrap;
 }
