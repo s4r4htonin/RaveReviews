@@ -148,41 +148,44 @@ router.post('/forgot', function (req, res, next) {
 
 //Show reset form when user accesses /reset with token
 router.get('/reset/:token', function (req, res) {
-    User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function (err, user) {
+    User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function (err, user) { //make sure correct user associated with non-expired reset token
         if (!user) {
             req.flash('error', 'Password reset token is invalid or has expired.');
             return res.redirect('/forgot');
         }
-        res.render('reset', { token: req.params.token });
+        res.render('reset', { token: req.params.token }); //if reset token is valid for user, load reset page and pass token to ejs file
     });
 });
 
 //Set new password for user
 router.post('/reset/:token', function (req, res) {
     async.waterfall([
+
+        //check if user is associated with non expired password reset token and reset password if correct
         function (done) {
             User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function (err, user) {
                 if (!user) {
                     req.flash('error', 'Password reset token is invalid or has expired.');
                     return res.redirect('back');
                 }
-                if (req.body.password === req.body.confirm) {
-                    user.setPassword(req.body.password, function (err) {
+                if (req.body.newPassword === req.body.confirmPassword) { //checks to make new password is the same as confirmed password
+                    user.setPassword(req.body.newPassword, function (err) { //sets new passwword as password
                         user.resetPasswordToken = undefined;
                         user.resetPasswordExpires = undefined;
-
-                        user.save(function (err) {
+                        user.save(function (err) { //saves updates to user in database
                             req.logIn(user, function (err) {
                                 done(err, user);
                             });
                         });
                     })
                 } else {
-                    req.flash("error", "Passwords do not match.");
+                    req.flash("error", "Passwords do not match."); 
                     return res.redirect('back');
                 }
             });
         },
+
+        //send a password change confirmation email to the user
         function (user, done) {
             let smtpTransport = nodemailer.createTransport({
                 service: 'Gmail',
@@ -203,6 +206,8 @@ router.post('/reset/:token', function (req, res) {
                 done(err);
             });
         }
+
+        //redirect back to festival index page
     ], function (err) {
         res.redirect('/festivals');
     });
