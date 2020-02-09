@@ -20,6 +20,9 @@ router.get("/register", function(req, res){
 //CREATE - Add a new user to the database
 router.post("/register", function(req, res){
     let newUser = new User({username: req.body.username});
+    if (req.body.adminCode === "rradmin44") { //if user enters correct admin code, account gets admin properties
+        newUser.isAdmin = true;
+    }
     User.register(newUser, req.body.password, function(err, user){ //try to add user
         if (err){
             return res.render("register", {"error": err.message}); //if error, reload register page and flash error message (user already created, etc.)

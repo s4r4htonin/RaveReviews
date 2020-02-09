@@ -12,7 +12,7 @@ middlewareObj.checkFestivalAuthorization = function (req, res, next) {
                 req.flash("error", "Festival not found");
                 res.redirect("back");
             } else {
-                if (foundFestival.author.id.equals(req.user._id)) { //Check if user is authorized to edit the festival (must be creator), must use .equals() method bc one is string and other is object
+                if (foundFestival.author.id.equals(req.user._id) || req.user.isAdmin) { //Check if user is authorized to edit the festival (must be creator), must use .equals() method bc one is string and other is object
                     next(); //executes next code after middleware
                 } else {
                     req.flash("error", "You do not have permission to access this");
@@ -33,7 +33,7 @@ middlewareObj.checkCommentAuthorization = function (req, res, next) {
                 req.flash("error", "Comment not found");
                 res.redirect("back");
             } else {
-                if (foundComment.author.id.equals(req.user._id)) { //Check if user is authorized to edit the comment (must be creator), must use .equals() method bc one is string and other is object
+                if (foundComment.author.id.equals(req.user._id) || req.user.isAdmin) { //Check if user is authorized to edit the comment (must be creator), must use .equals() method bc one is string and other is object
                     next(); //executes next code after middleware
                 } else {
                     req.flash("error", "You do not have permission to access this");

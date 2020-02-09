@@ -31,7 +31,11 @@
                         <li><a href="/login">Login</a></li>
                         <li><a href="/register">Sign Up</a></li>
                     <% } else { %>
-                        <li><a href="#"><%= currentUser.username %></a></li> <!--Maybe link to profile pg later-->
+                        <li><a href="#"><%= currentUser.username %>
+                            <% if(currentUser.isAdmin){ %> <!-- If user is an admin, add - admin after their username -->
+                                 - admin
+                            <% } %>
+                        </a></li> <!--Maybe link to profile pg later-->
                         <li><a href="/logout">Logout</a></li>
                     <% } %>
                 </ul>
