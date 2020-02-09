@@ -2,8 +2,9 @@
 const mongoose = require("mongoose");
 
 //Models
-const Festival = require("./models/festival");
-      Comment  = require("./models/comment");
+const Festival = require("./models/festival"),
+      Comment  = require("./models/comment"),
+      User     = require("./models/user");
 
 //Sample festivals
 const seeds = [
@@ -108,6 +109,7 @@ const seeds = [
     }
 ];
 
+//function to delete all current festivals & comments from the database and fill the database with seeds
 async function seedDB() {
     await Festival.deleteMany({}); //remove all festivals from the database
     await Comment.deleteMany({}); //remove all comments from the database
