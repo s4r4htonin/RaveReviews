@@ -20,6 +20,7 @@ form {
 
 .thumbnail {
     padding: 0;
+    height: 100%;
 }
 
 .thumbnail img {
@@ -48,3 +49,7 @@ form {
     opacity: 1;
 }
 
+.row .display-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
