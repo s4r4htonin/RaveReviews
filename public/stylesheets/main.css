@@ -58,3 +58,8 @@ form {
     z-index: 1;
     opacity: 1;
 }
+
+.displayFlex {
+    display: flex;
+    flex-wrap: wrap;
+}
