@@ -6,6 +6,15 @@ form {
     text-align: center;
 }
 
+.formHeader {
+    text-align: center;
+}
+
+.formStyling {
+    max-width: 50%;
+    margin: 25px auto;
+}
+
 .festivalUrl {
     color: white;
 }
